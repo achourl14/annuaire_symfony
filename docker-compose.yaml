@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+
+  db:
+    # dernière image de mysql
+    image: mysql:latest  # Utilise la dernière version de MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - "8090:80"
+    depends_on:
+      - db
+    
