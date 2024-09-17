@@ -19,7 +19,6 @@ class MaintenanceSubscriber
     #[AsEventListener]
     public function onKernelRequest(RequestEvent $event): void {
         $isMaintenanceActive = $this->parameterBag->get('mode_maintenance');
-        dump($isMaintenanceActive);
         if (!$isMaintenanceActive) return;
 
         $event->setResponse($this->maintenanceController->maintenanceRedirect());

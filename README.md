@@ -47,6 +47,9 @@ npm i
 npm run watch # Cette action est bloquante, ouvrez un autre terminal si besoin
 ```
 
+### Configuration
+Une configuration générique des variables d'environnement se trouve dans le fichier `.env`. Si vous avez besoin d'y apporter des modification, créez et utilisez le fichier `.env.local`. 
+
 ## Fonctionnement de l'annuaire
 todo
 
