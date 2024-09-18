@@ -31,7 +31,7 @@ class RegistrationController extends AbstractController
             $visible = $form->get('visible')->getData();
             $code = $form->get('code')->getData();
 
-            $userManager->initialieUser($user, $email, $password, $visible, $code);
+            $userManager->initialieUser($user, $password, $email, $visible, $code);
 
             $entityManager->persist($user);
             $entityManager->flush();
