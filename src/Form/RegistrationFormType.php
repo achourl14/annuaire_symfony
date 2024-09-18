@@ -21,7 +21,10 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('login', TextareaType::class)
             ->add('email', EmailType::class)
-            ->add('code', TextareaType::class)
+            ->add('code', TextareaType::class,
+            [
+                'required' => false,
+            ])
             // mettre un required a false
             ->add('visible', CheckboxType::class,
             [

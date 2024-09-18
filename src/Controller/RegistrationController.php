@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Utilisateur;
 use App\Form\RegistrationFormType;
 use App\Security\AppUserAuthentificatorAuthenticator;
+use App\Service\UserManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -16,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, Security $security, EntityManagerInterface $entityManager, UserManagerInterface $userManager): Response
     {
         $user = new Utilisateur();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -24,11 +25,13 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var string $plainPassword */
-            $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-            
+            $email = $form->get('email')->getData();
+            $password = $form->get('plainPassword')->getData();
+            $visible = $form->get('visible')->getData();
+            $code = $form->get('code')->getData();
+
+            $userManager->initialieUser($user, $email, $password, $visible, $code);
 
             $entityManager->persist($user);
             $entityManager->flush();
