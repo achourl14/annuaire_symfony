@@ -197,4 +197,19 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function addRole($role) : void {
+        if(!in_array($role, $this->roles)) {
+            $this->roles[] = $role;
+        }
+    }
+
+    public function removeRole($role) : void {
+        $index = array_search($role, $this->roles);
+        //array_search renvoie soit l'index (la clé) soit false is rien n'est trouver
+        //Préciser le !== false est bien nécessaire, car si le role se trouve à l'index 0, utiliser un simple if($index) ne vérifie pas le type! Et donc, si l'index retournait est 0, la condition ne passerait pas...!
+        if ($index !== false) {
+            unset($this->roles[$index]);
+        }
+    }
 }
