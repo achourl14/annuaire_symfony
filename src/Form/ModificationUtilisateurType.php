@@ -21,7 +21,7 @@ class ModificationUtilisateurType extends AbstractType
             ])
             ->add('password', PasswordType::class, [
                 'label' => 'Mot de passe',
-                'required' => false,
+                'required' => false, // Le mot de passe n'est pas obligatoire
             ])
             ->add('visible', null, [
                 'label' => 'Visible',
