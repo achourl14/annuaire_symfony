@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du profil de l'utilisateur{% endblock %}
+
+{% block body %}
+
+    <h1>Modification du profil de l'utilisateur</h1>
+
+    {{ form_errors(modificationForm) }}
+
+    {{ form_start(modificationForm) }}
+    {{ form_row(modificationForm.login) }}
+    {{ form_row(modificationForm.email) }}
+    {{ form_row(modificationForm.visible)}}
+    {{ form_row(modificationForm.plainPassword, {
+        label: 'Password'
+    }) }}
+    {{ form_row(modificationForm.agreeTerms) }}
+
+    <button type="submit" class="btn">Register</button>
+    {{ form_end(modificationForm) }}
+{% endblock %}
