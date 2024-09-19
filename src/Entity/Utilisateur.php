@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -50,6 +51,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $connectedAt = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $nomPhotoProfil = null;
 
     public function getId(): ?int
     {
@@ -194,6 +198,33 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setConnectedAt(?\DateTimeImmutable $connectedAt): static
     {
         $this->connectedAt = $connectedAt;
+
+        return $this;
+    }
+
+    public function addRole($role) : void {
+        if(!in_array($role, $this->roles)) {
+            $this->roles[] = $role;
+        }
+    }
+
+    public function removeRole($role) : void {
+        $index = array_search($role, $this->roles);
+        //array_search renvoie soit l'index (la clé) soit false is rien n'est trouver
+        //Préciser le !== false est bien nécessaire, car si le role se trouve à l'index 0, utiliser un simple if($index) ne vérifie pas le type! Et donc, si l'index retournait est 0, la condition ne passerait pas...!
+        if ($index !== false) {
+            unset($this->roles[$index]);
+        }
+    }
+
+    public function getNomPhotoProfil(): ?string
+    {
+        return $this->nomPhotoProfil;
+    }
+
+    public function setNomPhotoProfil(?string $nomPhotoProfil): static
+    {
+        $this->nomPhotoProfil = $nomPhotoProfil;
 
         return $this;
     }

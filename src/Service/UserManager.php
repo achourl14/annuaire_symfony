@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Entity\Utilisateur;
 use phpDocumentor\Reflection\Types\Boolean;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserManager implements UserManagerInterface
@@ -11,7 +13,9 @@ class UserManager implements UserManagerInterface
 
 
     public function __construct(
-        private UserPasswordHasherInterface $userPasswordHasher)
+        private UserPasswordHasherInterface $userPasswordHasher,
+        #[Autowire('%dossier_photo_profils%')] private string $dossier_photo_profils
+    )
     {
     }
 
@@ -28,13 +32,25 @@ class UserManager implements UserManagerInterface
        $user->setCode($generatedCode);
     }
 
-    public function initialieUser(Utilisateur $user, string $password, string $email, bool $visible, ?string $codeUser) : Utilisateur
+    private function sauvegarderPhotoProfil(Utilisateur $utilisateur, ?UploadedFile $fichierPhotoProfil) : void {
+        if($fichierPhotoProfil != null) {
+            //On configure le nom de l'image à sauvegarder
+            //On la déplace vers son dossier de destination
+            //On met à jour l'attribut "nomPhotoProfil" de l'utilisateur
+            $saveName = md5(uniqid()) . '.' . $fichierPhotoProfil->guessExtension();
+            $fichierPhotoProfil->move($this->dossier_photo_profils, $saveName);
+            $utilisateur->setNomPhotoProfil($saveName);
+        }
+    }
+
+    public function initialieUser(Utilisateur $user, string $password, string $email, bool $visible, ?string $codeUser, ?UploadedFile $fichierPhotoProfil) : Utilisateur
     {
         $user->setEmail($email);
         $user->setRoles(['ROLE_USER']);
         $user->setVisible($visible);
         $user->setUpdatedAt(new \DateTimeImmutable());
 
+        $this->sauvegarderPhotoProfil($user, $fichierPhotoProfil);
         $this->manageCodeUser($user, $codeUser);
 
         // encode the plain password

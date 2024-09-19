@@ -3,9 +3,10 @@
 namespace App\Service;
 
 use App\Entity\Utilisateur;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface UserManagerInterface
 {
-    public function initialieUser(Utilisateur $user, string $password, string $email, bool $visible, string $codeUser): Utilisateur;
     public function modifieUser($user, string $password, string $email, bool $visible, string $codeUser,string $numTelephone): Utilisateur;
+    public function initialieUser(Utilisateur $user, string $password, string $email, bool $visible, string $codeUser, ?UploadedFile $fichierPhotoProfil): Utilisateur;
 }
