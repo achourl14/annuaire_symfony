@@ -9,14 +9,13 @@
     {{ form_errors(modificationForm) }}
 
     {{ form_start(modificationForm) }}
-    {{ form_row(modificationForm.login) }}
     {{ form_row(modificationForm.email) }}
     {{ form_row(modificationForm.visible)}}
-    {{ form_row(modificationForm.plainPassword, {
+    {{ form_row(modificationForm.password, {
         label: 'Password'
     }) }}
-    {{ form_row(modificationForm.agreeTerms) }}
+    {{ form_row(modificationForm.numTelephone) }}
 
-    <button type="submit" class="btn">Register</button>
+    <button type="submit" class="btn">Modifier le profil</button>
     {{ form_end(modificationForm) }}
 {% endblock %}
