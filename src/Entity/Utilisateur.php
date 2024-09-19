@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -50,6 +51,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $connectedAt = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $nomPhotoProfil = null;
 
     public function getId(): ?int
     {
@@ -211,5 +215,17 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         if ($index !== false) {
             unset($this->roles[$index]);
         }
+    }
+
+    public function getNomPhotoProfil(): ?string
+    {
+        return $this->nomPhotoProfil;
+    }
+
+    public function setNomPhotoProfil(?string $nomPhotoProfil): static
+    {
+        $this->nomPhotoProfil = $nomPhotoProfil;
+
+        return $this;
     }
 }
