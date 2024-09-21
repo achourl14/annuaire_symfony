@@ -43,6 +43,16 @@ class ModificationController extends AbstractController
         return $this->render('modification/modification_utilisateur.html.twig', [
             'modificationForm' => $form,
         ]);
-    }
 
+    }
+    #[Route('/formSuppressionUtilisateur/{id}', name: 'app_removeUser',options: ["expose" => true],methods: ["GET"])]
+    #[IsGranted("ROLE_USER")]
+    public function afficherFormSuppression(Request $request, ?Utilisateur $utilisateur): Response
+    {
+
+        $utilisateur = $this->getUser();
+        return $this->render('modification/suppressionUtilisateur.html.twig', [
+            'utilisateur' => $utilisateur,
+        ]);
+    }
 }
