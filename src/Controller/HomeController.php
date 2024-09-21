@@ -11,13 +11,13 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     public function __construct(
-        #[Autowire('%dossier_photo_profils%')] private string $dossier_photo_profils
+        private readonly UtilisateurRepository $utilisateurRepository
     ) {}
 
     #[Route('/', name: 'app_home')]
-    public function index(UtilisateurRepository $ur): Response
+    public function index(): Response
     {
-        $users = $ur->findAll();
+        $users = $this->utilisateurRepository->findAll();
         return $this->render('home/index.html.twig', [
             'utilisateurs' => $users,
             //'dossierPP' => $this->dossier_photo_profils

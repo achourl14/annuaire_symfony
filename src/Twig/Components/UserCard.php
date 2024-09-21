@@ -6,7 +6,7 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
-#[AsTwigComponent(template: 'Components/UserCard.html.twig')]
+#[AsLiveComponent('UserCard', template: 'components/user_card.html.twig')]
 class UserCard
 {
     use DefaultActionTrait;
@@ -20,7 +20,7 @@ class UserCard
         private UtilisateurRepository $ur
     ) {}
 
-    public function getUtilisateurs(): array
+    public function getData(): array
     {
         return $this->ur->findBySimilarLogin($this->query);
     }
