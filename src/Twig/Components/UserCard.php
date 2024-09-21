@@ -1,15 +1,20 @@
 <?php
 
 namespace App\Twig\Components;
-use App\Entity\Utilisateur;
 use App\Repository\UtilisateurRepository;
+use Symfony\UX\LiveComponent\Attribute\LiveProp;
+use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent(template: 'Components/UserCard.html.twig')]
 class UserCard
 {
-    //public Utilisateur $user;
+    use DefaultActionTrait;
+
     public string $dossierPP;
+
+    #[LiveProp(writable: true)]
+    public string $query = '';
 
     public function __construct(
         private UtilisateurRepository $ur
@@ -17,6 +22,6 @@ class UserCard
 
     public function getUtilisateurs(): array
     {
-        return $this->ur->findAll();
+        return $this->ur->findBySimilarLogin($this->query);
     }
 }

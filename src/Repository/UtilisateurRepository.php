@@ -33,6 +33,15 @@ class UtilisateurRepository extends ServiceEntityRepository implements PasswordU
         $this->getEntityManager()->flush();
     }
 
+    public function findBySimilarLogin(string $login): mixed
+    {
+        return $this->createQueryBuilder('user')
+                ->where('user.login LIKE :login')
+                ->setParameter('login', '%'.$login.'%')
+                ->getQuery()
+                ->getResult();
+    }
+
     //    /**
     //     * @return Utilisateur[] Returns an array of Utilisateur objects
     //     */
