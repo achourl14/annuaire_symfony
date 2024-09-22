@@ -13,6 +13,8 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+
+        {% block customImports %}{% endblock %}
     </head>
     <body>
         {% block header %}

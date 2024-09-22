@@ -2,6 +2,10 @@
 
 {% block title %}Accueil{% endblock %}
 
+{% block customImports %}
+    <script defer src="{{ asset('js/user_search.js') }}"></script>
+{% endblock %}
+
 {% block body %}
     {{ component('RechercheUtilisateur') }}
 {% endblock %}

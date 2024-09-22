@@ -18,7 +18,7 @@
     <div id="user-list" class="container w-2/3 self-center justify-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 pr-0">
         {% for user in this.data %}
             {% if is_granted('ROLE_ADMIN') or user.isVisible() %}
-                <div data-userid="{{ user.id }}" class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-10">
+                <div data-userlogin="{{ user.login }}" data-userid="{{ user.id }}" class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-10">
                     <div class="flex justify-end px-4 pt-4">
                         {# Dropdown menu #}
                         {% if is_granted('ROLE_ADMIN') %}
