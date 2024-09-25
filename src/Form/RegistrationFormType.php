@@ -38,14 +38,17 @@ class RegistrationFormType extends AbstractType
                     )
                 ]
             ])
+//            ajoute un id pour le champ code
             ->add('code', TextType::class,
             [
                 'required' => false,
+                'attr' => [
+                    'id' => 'codeUser'
+                ]
             ])
             // mettre un required a false
             ->add('visible', ChoiceType::class,
             [
-                'required' => false,
                // ajoute 2 choix : oui et non
                 'choices' => [
                     'Oui' => true,
