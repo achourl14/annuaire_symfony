@@ -37,22 +37,36 @@ class ModificationController extends AbstractController
 
             $userManager->modifieUser($user, $password, $email, $visible, $code, $numTel);
             $entityManager->flush();
+            $this->addFlash('success',"L'utilisateur a été modifié");
             return $this->redirectToRoute('app_home');
         }
 
+
         return $this->render('modification/modification_utilisateur.html.twig', [
             'modificationForm' => $form,
+            'utilisateur' => $user,
         ]);
 
     }
-    #[Route('/formSuppressionUtilisateur/{id}', name: 'app_removeUser',options: ["expose" => true],methods: ["GET"])]
+    #[Route('/formSuppressionUtilisateur/{id}', name: 'app_form_removeUser')]
     #[IsGranted("ROLE_USER")]
-    public function afficherFormSuppression(Request $request, ?Utilisateur $utilisateur): Response
+    public function afficherFormSuppression(?Utilisateur $utilisateur): Response
     {
 
         $utilisateur = $this->getUser();
         return $this->render('modification/suppressionUtilisateur.html.twig', [
             'utilisateur' => $utilisateur,
         ]);
+    }
+
+    #[Route('/supprimerUtilisateur/{id}', name: 'app_removeUser',options: ["expose" => true],methods: ['GET','DELETE'])]
+    #[IsGranted("ROLE_USER")]
+    public function removeUser(EntityManagerInterface $entityManager): Response
+    {
+        $utilisateur = $this->getUser();
+        $entityManager->remove($utilisateur);
+        $entityManager->flush();
+        $this->addFlash('success',"L'utilisateur a été supprimé");
+        return $this->redirectToRoute('app_home');
     }
 }

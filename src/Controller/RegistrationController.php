@@ -37,6 +37,8 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->addFlash('success',"L'utilisateur a bien été créé");
+
             // do anything else you need here, like send an email
 
             return $security->login($user, AppUserAuthentificatorAuthenticator::class, 'main');

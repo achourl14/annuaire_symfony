@@ -1,24 +1,40 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        <script src='https://flowbite.com/docs/flowbite.min.js'></script>
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    <script src='https://flowbite.com/docs/flowbite.min.js'></script>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block header %}
-            {{ include('Components/navbar.html.twig') }}
-        {% endblock %}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+{% block header %}
+    {{ include('Components/navbar.html.twig') }}
+{% endblock %}
 
-        {% block body %}{% endblock %}
-    </body>
+<div id="flashes-container" class="w-full p-4">
+    <!-- Boucle sur les messages flash de différents types -->
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="w-full p-4 mb-4 border-t-4 bg-{{ type == 'success' ? 'green' : (type == 'error' ? 'red' : (type == 'warning' ? 'yellow' : 'gray')) }}-50 border-{{ type == 'success' ? 'green' : (type == 'error' ? 'red' : (type == 'warning' ? 'yellow' : 'gray')) }}-500 text-{{ type == 'success' ? 'green' : (type == 'error' ? 'red' : (type == 'warning' ? 'yellow' : 'gray')) }}-800 text-center text-lg">
+                <svg class="w-4 h-4 inline mr-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+
+
+{% block body %}{% endblock %}
+</body>
 </html>
