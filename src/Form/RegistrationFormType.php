@@ -5,9 +5,11 @@ namespace App\Form;
 use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -23,7 +25,7 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('login', TextareaType::class)
+            ->add('login', TextType::class)
             ->add('email', EmailType::class, [
                 'constraints' => [
                     new NotBlank(),
@@ -36,14 +38,19 @@ class RegistrationFormType extends AbstractType
                     )
                 ]
             ])
-            ->add('code', TextareaType::class,
+            ->add('code', TextType::class,
             [
                 'required' => false,
             ])
             // mettre un required a false
-            ->add('visible', CheckboxType::class,
+            ->add('visible', ChoiceType::class,
             [
                 'required' => false,
+               // ajoute 2 choix : oui et non
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false
+                ]
             ])
 
             ->add('plainPassword', PasswordType::class, [
@@ -85,7 +92,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter les conditions d\'utilisation',
                     ]),
                 ],
             ])
