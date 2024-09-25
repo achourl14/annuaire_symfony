@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_LOGIN', fields: ['login'])]
 #[UniqueEntity(fields: ['login'], message: 'There is already an account with this login')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-//#[UniqueEntity(fields: ['code'], message: 'There is already an account with this code')]
+#[UniqueEntity(fields: ['code'], message: 'There is already an account with this code')]
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
