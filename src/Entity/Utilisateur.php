@@ -228,4 +228,18 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function toJSON(): array {
+        return [
+            "login" => $this->login,
+            "is_admin" => $this->isAdmin(),
+            "visible" => $this->isVisible(),
+            "email" => $this->email,
+            "num_telephone" => $this->numTelephone
+        ];
+    }
+
+    public function isAdmin(): bool {
+        return in_array('ROLE_ADMIN', $this->roles);
+    }
 }
