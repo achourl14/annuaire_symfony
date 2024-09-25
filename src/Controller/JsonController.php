@@ -35,7 +35,7 @@ class JsonController extends AbstractController
         return new JsonResponse($jsonUsers, 200);
     }
 
-    #[Route('/api/utilisateurs/{login}', name: 'api_get_user_info', methods: ['GET'])]
+    #[Route('/api/utilisateurs/{code}', name: 'api_get_user_info', methods: ['GET'])]
     public function getUserInfo(?Utilisateur $utilisateur): JsonResponse
     {
         if ($utilisateur === null) {

@@ -157,7 +157,7 @@ class MakeUserCommand extends Command
         }
 
         // Créer user
-        $user = $this->userManager->initialieUser(new Utilisateur(), $password, $email, $visibilite, $code);
+        $user = $this->userManager->initialieUser(new Utilisateur(), $password, $email, $visibilite, $code, null);
         $user->setLogin($login);
         if($admin)
             $user->addRole('ROLE_ADMIN');
