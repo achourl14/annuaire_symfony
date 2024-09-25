@@ -66,6 +66,7 @@ class RegistrationFormType extends AbstractType
 //        assert not blank, not null, length min 8, max 30
             ])
             ->add('profile', FileType::class, [
+                'required' => false,
                 'constraints' => [
                     // aille maximum 10 mégaoctets, formats autorisés : jpg, et png. Configurez des messages d’erreurs dans le cas où la taille n’est pas respectée (maxSizeMessage) ou que le format n’est pas respecté (extensionsMessage).
                     new File([
