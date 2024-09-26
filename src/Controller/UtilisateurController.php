@@ -107,4 +107,19 @@ class UtilisateurController extends AbstractController
         $this->addFlash('success',"L'utilisateur a été supprimé");
         return $this->redirectToRoute('app_home');
     }
+
+
+    #[Route('/profil/{code}',name:'detailProfil',methods: 'GET')]
+    public function pagePerso(?Utilisateur $utilisateur) : Response
+    {
+        if($utilisateur == null){
+            $this->addFlash('error','Utilisateur inexistant !');
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('utilisateur/detail_profil.html.twig', [
+            'controller_name' => 'ModificationController',
+            'utilisateur' => $utilisateur,
+        ]);
+    }
 }
