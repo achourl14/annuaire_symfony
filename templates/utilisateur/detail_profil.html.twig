@@ -1,23 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block lien_js %}
-    <script defer type="text/javascript" src="{{ asset("js/publications.js") }}"></script>
-    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
-    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
-{% endblock %}
-
 {% block title %}Page de {{ utilisateur.login }} {% endblock %}
 
 {% block body %}
-    <main class="flex items-center justify-center h-screen">
+    <main class="flex items-center justify-center">
         <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm mt-8">
             <div class="flex flex-col items-center pb-10">
                 <img class="w-8 h-8 rounded-full" alt="user photo"
-                        {% set photo = app.user.nomPhotoProfil %}
-                        {% if file_exists('img/utilisateurs/uploads/' ~ photo) %}
-                            src="{{ asset('img/utilisateurs/uploads/' ~ photo) }}"
-                        {% else %}
+                        {% set photo = utilisateur.nomPhotoProfil %}
+                        {% if photo is null %}
                             src="{{ asset('img/utilisateurs/anonyme.jpg') }}"
+                        {% else  %}
+                            src="{{ asset('img/utilisateurs/uploads/' ~ photo) }}"
                         {% endif %}
                 >
                 <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ utilisateur.login }}</h5>

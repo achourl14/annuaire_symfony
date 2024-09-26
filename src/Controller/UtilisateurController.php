@@ -110,11 +110,13 @@ class UtilisateurController extends AbstractController
 
 
     #[Route('/profil/{code}',name:'detailProfil',methods: 'GET')]
-    public function pagePerso(?Utilisateur $utilisateur) : Response
+    public function pagePerso(string $code) : Response
     {
-        if($utilisateur == null){
+        $utilisateur = $this->utilisateurRepository->findOneBy(['code' => $code]);
+
+        if($utilisateur == null) {
             $this->addFlash('error','Utilisateur inexistant !');
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home');
         }
 
         return $this->render('utilisateur/detail_profil.html.twig', [
