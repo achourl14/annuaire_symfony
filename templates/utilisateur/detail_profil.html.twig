@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block lien_js %}
+    <script defer type="text/javascript" src="{{ asset("js/publications.js") }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+{% endblock %}
+
+{% block title %}Page de {{ utilisateur.login }} {% endblock %}
+
+{% block body %}
+    <main class="flex items-center justify-center h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm mt-8">
+            <div class="flex flex-col items-center pb-10">
+                <img class="w-8 h-8 rounded-full" alt="user photo"
+                        {% set photo = app.user.nomPhotoProfil %}
+                        {% if file_exists('img/utilisateurs/uploads/' ~ photo) %}
+                            src="{{ asset('img/utilisateurs/uploads/' ~ photo) }}"
+                        {% else %}
+                            src="{{ asset('img/utilisateurs/anonyme.jpg') }}"
+                        {% endif %}
+                >
+                <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ utilisateur.login }}</h5>
+                <span class="text-sm text-gray-500 dark:text-gray-400">@{{ utilisateur.login }}</span>
+                <p class="text-gray-600 mt-2"><strong>Email:</strong> {{ utilisateur.email }}</p>
+                {% if utilisateur.numTelephone %}
+                <p class="text-gray-600"><strong>Téléphone:</strong> {{ utilisateur.numTelephone }}</p>
+                {% endif %}
+            </div>
+            <div class="flex justify-center mt-4 md:mt-6">
+                <a href="{{ path('app_home') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Accueil</a>
+            </div>
+        </div>
+    </main>
+{% endblock %}
