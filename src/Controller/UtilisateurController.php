@@ -11,19 +11,57 @@ use App\Service\UserManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class ModificationController extends AbstractController
+class UtilisateurController extends AbstractController
 {
+
+
+
+// mettre en place une route qui permet de rendre visible ou pas un utilisateur
+
+    public function __construct(
+        private UtilisateurRepository $utilisateurRepository,
+        private Security $security,
+        private EntityManagerInterface $entityManager,
+        private UserManagerInterface $userManager
+    )
+    {
+
+    }
+
+    #[Route('/visible/{id}', name: 'app_visible', options: ["expose" => true], methods: ['POST'])]
+    public function rendreVisibleInvisible(int $id): JsonResponse
+    {
+        $recupUser = $this->utilisateurRepository->find($id);
+
+        if ($recupUser === $this->security->getUser()) {
+            // Inverser la visibilité
+            $recupUser->setVisible(!$recupUser->getVisible());
+
+            // Sauvegarder dans la base de données
+            $this->entityManager->persist($recupUser);
+            $this->entityManager->flush();
+
+            // Retourner la nouvelle visibilité
+            return new JsonResponse(['visible' => $recupUser->getVisible()], 200);
+        }
+
+        // Si l'utilisateur n'a pas les droits
+        return new JsonResponse(["message" => "Vous n'avez pas les droits pour effectuer cette action"], 403);
+    }
+
+
     #[Route('/modification', name: 'app_modification')]
     #[IsGranted("ROLE_USER")]
-    public function modify(Request $request, Security $security, EntityManagerInterface $entityManager, UserManagerInterface $userManager): Response
+    public function modify(Request $request): Response
     {
         // Récupérer l'utilisateur actuellement connecté
-        $user = $security->getUser();
+        $user = $this->security->getUser();
 
         $form = $this->createForm(ModificationUtilisateurType::class, $user);
         $form->handleRequest($request);
@@ -35,8 +73,8 @@ class ModificationController extends AbstractController
             $code = $form->get('code')->getData();
             $numTel = $form->get('numTelephone')->getData();
 
-            $userManager->modifieUser($user, $password, $email, $visible, $code, $numTel);
-            $entityManager->flush();
+            $this->userManager->modifieUser($user, $password, $email, $visible, $code, $numTel);
+            $this->entityManager->flush();
             $this->addFlash('success',"L'utilisateur a été modifié");
             return $this->redirectToRoute('app_home');
         }
