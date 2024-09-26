@@ -58,4 +58,20 @@ class UserManager implements UserManagerInterface
 
         return $user;
     }
+
+    public function modifieUser($user, string $password, string $email, bool $visible, string $codeUser, $numTelephone): Utilisateur
+    {
+        $user->setEmail($email);
+        $user->setVisible($visible);
+        $user->setUpdatedAt(new \DateTimeImmutable());
+        $user->setNumTelephone($numTelephone);
+        $this->manageCodeUser($user, $codeUser);
+
+        if (!empty($password)) {
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
+        }
+
+        return $user;
+    }
+
 }

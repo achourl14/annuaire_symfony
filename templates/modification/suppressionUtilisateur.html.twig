@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suppression du profil de l'utilisateur {{ utilisateur.login }}{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex items-center justify-center bg-gray-100"> <!-- Alignement centré -->
+        <div class="w-full py-6 bg-white cursor-default pointer-events-auto dark:bg-white-800 relative rounded-xl mx-auto max-w-lg border border-gray-300 shadow-lg mt-12"> <!-- Ajuste la marge supérieure -->
+            <div class="space-y-4 p-6">
+                <div class="space-y-2 text-center dark:text-black">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Supprimer le profil de l'utilisateur {{ utilisateur.login }}</h2>
+                    <p class="text-gray-500">
+                        Êtes-vous sûr de vouloir faire cela ? Cette action est irréversible.
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <div class="px-6 py-4">
+                    <div class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
+                        <a href="{{ path('app_removeUser',{id: app.user.login}) }}" class="inline-flex items-center justify-center py-2 gap-2 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.5rem] px-6 text-sm text-white bg-green-500 border-transparent hover:bg-green-600 focus:ring-green-500 focus:bg-green-600 focus:border-green-600 dark:bg-green-600 dark:hover:bg-green-700 dark:border-transparent dark:focus:bg-green-700">
+                            Confirmer
+                        </a>
+                        <a href="{{ path('app_home') }}" class="inline-flex items-center justify-center py-2 gap-2 font-medium rounded-lg border border-red-600 transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.5rem] px-6 text-sm text-white bg-red-600 hover:bg-red-700 focus:bg-red-700 focus:ring-red-600">
+                            Annuler
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
