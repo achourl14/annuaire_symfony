@@ -47,7 +47,7 @@
                     <li>
                         <a href="{{ path('app_modification') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white logout-link">Modifier le profil</a>
                         <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white logout-link">Se déconnecter</a>
-                        <a href="{{ path('app_form_removeUser',{id: app.user.login}) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white logout-link">Supprimer le compte</a>
+                        <a href="{{ path('app_form_removeUser',{code: app.user.code}) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white logout-link">Supprimer le compte</a>
                     </li>
                 </ul>
             </div>

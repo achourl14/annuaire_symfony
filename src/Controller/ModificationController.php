@@ -46,27 +46,72 @@ class ModificationController extends AbstractController
             'modificationForm' => $form,
             'utilisateur' => $user,
         ]);
-
     }
-    #[Route('/formSuppressionUtilisateur/{id}', name: 'app_form_removeUser')]
+
+    #[Route('/utilisateurs/{code}/supprimer', name: 'app_form_removeUser', methods: ['GET'])]
     #[IsGranted("ROLE_USER")]
     public function afficherFormSuppression(?Utilisateur $utilisateur): Response
     {
+        if ($utilisateur == null) {
+            $this->addFlash('error',"L'utilisateur n'existe pas");
+            return $this->redirectToRoute('app_home');
+        }
 
-        $utilisateur = $this->getUser();
+        /** @var Utilisateur $loggedInUser */
+        $loggedInUser = $this->getUser();
+        if ($loggedInUser == null) {
+            $this->addFlash('error', "Vous n'êtes pas connecté.");
+            return $this->redirectToRoute('app_login');
+        }
+
+        if ($loggedInUser->isAdmin()) {
+            if ($utilisateur->isAdmin()) {
+                $this->addFlash('error', "L'utilisateur que vous essayez de supprimer est également un administrateur.");
+                return $this->redirectToRoute('app_home');
+            }
+        } else {
+            if ($utilisateur->getId() != $loggedInUser->getId()) {
+                $this->addFlash('error', "Vous n'avez pas la permission de supprimer un autre utilisateur.");
+                return $this->redirectToRoute('app_home');
+            }
+        }
+
         return $this->render('modification/suppressionUtilisateur.html.twig', [
             'utilisateur' => $utilisateur,
         ]);
     }
 
-    #[Route('/supprimerUtilisateur/{id}', name: 'app_removeUser',options: ["expose" => true],methods: ['GET','DELETE'])]
+    #[Route('/utilisateurs/{code}/supprimer', name: 'app_removeUser', options: ["expose" => true],methods: ['POST','DELETE'])]
     #[IsGranted("ROLE_USER")]
-    public function removeUser(EntityManagerInterface $entityManager): Response
+    public function removeUser(?Utilisateur $utilisateur, EntityManagerInterface $entityManager): Response
     {
-        $utilisateur = $this->getUser();
+        if ($utilisateur == null) {
+            $this->addFlash('error',"L'utilisateur n'existe pas");
+            return $this->redirectToRoute('app_home');
+        }
+
+        /** @var Utilisateur $loggedInUser */
+        $loggedInUser = $this->getUser();
+        if ($loggedInUser == null) {
+            $this->addFlash('error', "Vous n'êtes pas connecté.");
+            return $this->redirectToRoute('app_login');
+        }
+
+        if ($loggedInUser->isAdmin()) {
+            if ($utilisateur->isAdmin()) {
+                $this->addFlash('error', "L'utilisateur que vous essayez de supprimer est également un administrateur.");
+                return $this->redirectToRoute('app_home');
+            }
+        } else {
+            if ($utilisateur->getId() != $loggedInUser->getId()) {
+                $this->addFlash('error', "Vous n'avez pas la permission de supprimer un autre utilisateur.");
+                return $this->redirectToRoute('app_home');
+            }
+        }
+
         $entityManager->remove($utilisateur);
         $entityManager->flush();
-        $this->addFlash('success',"L'utilisateur a été supprimé");
+        $this->addFlash('success',"L'utilisateur a été supprimé.");
         return $this->redirectToRoute('app_home');
     }
 }
