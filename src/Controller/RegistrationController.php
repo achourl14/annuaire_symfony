@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Utilisateur;
 use App\Form\RegistrationFormType;
+use App\Repository\UtilisateurRepository;
 use App\Security\AppUserAuthentificatorAuthenticator;
 use App\Service\UserManagerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -16,6 +18,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
+
+
+    public function __construct(
+        private UtilisateurRepository $utilisateurRepository,
+    )
+    {
+    }
+
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, Security $security, EntityManagerInterface $entityManager, UserManagerInterface $userManager): Response
     {
@@ -45,5 +55,15 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
+    }
+
+    #[Route('/verification/code/{code}', name: 'verifCodeUser', options: ['expose' => true])]
+    public function verificationCodeUtilisateur(string $code): Response
+    {
+        $userExist = $this->utilisateurRepository->findOneBy(['code' => $code]);
+        if ($userExist) {
+            return new JsonResponse(['error' => 'Code déjà utilisé'], 400);
+        }
+        return new JsonResponse([],204);
     }
 }
