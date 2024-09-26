@@ -20,7 +20,11 @@
 > [!IMPORTANT]
 > Ce projet contient des dépendances en plus de celles de Symfony, notamment Tailwind. Des étapes supplémentaires sont nécessaires pour que l'ensemble du projet fonctionne.
 
-1) Se positionner dans le dossier /shared/public_html et exécuter la commande suivante:
+> [!IMPORTANT]
+> Si, pendant l'installation des dépendances de Symfony, on vous demande si vous souhaitez installer une recipe, **répondez oui**.
+> Si vous avez accidentellement répondu non, supprimez le module (`composer remove ...`) et réinstallez-le (`composer require ...`).
+
+1) Se positionner dans le dossier `/shared/public_html` et exécuter la commande suivante:
 ```shell
 git clone git@github.com:projets-xil/s5-web-projet1.git
 ```
@@ -33,7 +37,7 @@ DATABASE_URL=mysql://root:root@db:3306/annuaire
 > [!NOTE]
 > Si une base de données du nom d'*annuaire* existe déjà au sein de la BDD du conteneur Docker, pensez à la renommer ou, au cas échéant, à changer la cible de *DATABASE_URL*.
 
-3) Dans le terminal du conteneur Docker (via Docker Desktop ou via la CLI), se placer dans le dossier /shared/public_html/s5_proj1 et exécuter les commandes suivantes:
+3) Dans le terminal du conteneur Docker (via Docker Desktop ou via la CLI), se placer dans le dossier `/shared/public_html/s5_proj1` et exécuter les commandes suivantes:
 ```shell
 composer install
 php bin/console doctrine:database:create
@@ -41,15 +45,16 @@ php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 ```
 
-4) Lancer cette commande à la racine du projet, dans le terminal Docker, afin de lancer Tailwind:
+4) Lancer ces commandes à la racine du projet, dans le terminal Docker, afin de créer les fichiers de Tailwind:
 ```shell
-php bin/console tailwind:build --watch
+php bin/console tailwind:init
+php bin/console tailwind:build
 ```
 
 > [!NOTE]
 > Si vous avez installé la CLI Symfony en local sur la machine hôte, vous pouvez également le faire dans un terminal de l'hôte:
 ```shell
-symfony console tailwind:build --watch
+symfony console tailwind:build
 ```
 
 ### Configuration
