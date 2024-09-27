@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du profil de {{ app.user.login}} {% endblock %}
+
+{% block body %}
+    <div class="min-h-screen justify-center py-12 sm:px-6 lg:px-8 px-6 pt-0 overflow-hidden">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+            <img class="mx-auto h-10 w-auto" src="{{ asset('img/login.svg') }}" alt="Update icon">
+            <h2 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+                Modifier le compte
+            </h2>
+        </div>
+
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                {{ form_start(modificationForm) }}
+
+                <div class="mt-4">
+                    <label for="modification_email" class="block text-sm font-medium leading-5 text-gray-700">Email</label>
+                    <div class="mt-1 rounded-md shadow-sm">
+                        {{ form_widget(modificationForm.email, {
+                            'attr': {
+                                'class': 'form-control appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
+                            }
+                        } ) }}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label for="modification_visible" class="block text-sm font-medium leading-5 text-gray-700">Visibilité</label>
+                    <div class="mt-1 rounded-md shadow-sm">
+                        {{ form_widget(modificationForm.visible, {
+                            'attr': {
+                                'class': 'form-control appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
+                            }
+                        }) }}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label for="modification_password" class="block text-sm font-medium leading-5 text-gray-700">Ancien mot de passe</label>
+                    <div class="mt-1 rounded-md shadow-sm">
+                        {{ form_widget(modificationForm.oldPassword, {
+                            'attr': {
+                                'class': 'form-control appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
+                            }
+                        }) }}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label for="modification_password" class="block text-sm font-medium leading-5 text-gray-700">Nouveau mot de passe</label>
+                    <div class="mt-1 rounded-md shadow-sm">
+                        {{ form_widget(modificationForm.newPassword, {
+                            'attr': {
+                                'class': 'form-control appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
+                            }
+                        }) }}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label for="registration_code" class="block text-sm font-medium leading-5 text-gray-700">Code</label>
+                    <div class="mt-1 rounded-md shadow-sm" id="form-code">
+                        {{ form_widget(modificationForm.code, {
+                            'attr': {
+                                'class': 'form-control appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
+                            }
+                        }) }}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label for="modification_profile" class="block text-sm font-medium leading-5 text-gray-700">Photo de profil</label>
+                    <div class="mt-1 rounded-md shadow-sm">
+                        {{ form_widget(modificationForm.profile, {
+                            'attr': {
+                                'class': 'form-control appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
+                            }
+                        }) }}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label for="modification_num" class="block text-sm font-medium leading-5 text-gray-700">Numéro téléphone</label>
+                    <div class="mt-1 rounded-md shadow-sm" id="form-code">
+                        {{ form_widget(modificationForm.numTelephone, {
+                            'attr': {
+                                'class': 'form-control appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
+                            }
+                        }) }}
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <span class="block w-full rounded-md shadow-sm">
+                        <button type="submit" id="submit-button" class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                            Modifier
+                        </button>
+                    </span>
+                </div>
+
+                {{ form_end(modificationForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

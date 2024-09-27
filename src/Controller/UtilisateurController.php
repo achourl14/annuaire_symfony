@@ -68,19 +68,20 @@ class UtilisateurController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->get('email')->getData();
-            $password = $form->get('password')->getData();
+            $password = $form->get('newPassword')->getData();
             $visible = $form->get('visible')->getData();
             $code = $form->get('code')->getData();
             $numTel = $form->get('numTelephone')->getData();
+            $fichierPhotoProfil = $form->get('profile')->getData();
 
-            $this->userManager->modifieUser($user, $password, $email, $visible, $code, $numTel);
+            $this->userManager->modifieUser($user, $password, $email, $visible, $code, $numTel,$fichierPhotoProfil);
             $this->entityManager->flush();
             $this->addFlash('success',"L'utilisateur a été modifié");
             return $this->redirectToRoute('app_home');
         }
 
 
-        return $this->render('modification/modification_utilisateur.html.twig', [
+        return $this->render('utilisateur/modification_utilisateur.html.twig', [
             'modificationForm' => $form,
             'utilisateur' => $user,
         ]);
@@ -92,7 +93,7 @@ class UtilisateurController extends AbstractController
     {
 
         $utilisateur = $this->getUser();
-        return $this->render('modification/suppressionUtilisateur.html.twig', [
+        return $this->render('utilisateur/suppressionUtilisateur.html.twig', [
             'utilisateur' => $utilisateur,
         ]);
     }
@@ -123,5 +124,15 @@ class UtilisateurController extends AbstractController
             'controller_name' => 'ModificationController',
             'utilisateur' => $utilisateur,
         ]);
+    }
+
+    #[Route('/verification/code/{code}', name: 'verifCodeUser', options: ['expose' => true])]
+    public function verificationCodeUtilisateur(string $code): Response
+    {
+        $userExist = $this->utilisateurRepository->findOneBy(['code' => $code]);
+        if ($userExist) {
+            return new JsonResponse(['error' => 'Code déjà utilisé'], 400);
+        }
+        return new JsonResponse([],204);
     }
 }
