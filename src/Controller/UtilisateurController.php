@@ -67,14 +67,30 @@ class UtilisateurController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->get('email')->getData();
-            $password = $form->get('newPassword')->getData();
+            if ($form->get('email')->getData() != null) {
+                $email = $form->get('email')->getData();
+            } else {
+                $email = $user->getEmail();
+            }
+            if ($form->get('newPassword')->getData() != null) {
+                $password = $form->get('newPassword')->getData();
+            } else {
+                $password = $form->get('oldPassword')->getData();
+            }
             $visible = $form->get('visible')->getData();
-            $code = $form->get('code')->getData();
+
             $numTel = $form->get('numTelephone')->getData();
             $fichierPhotoProfil = $form->get('profile')->getData();
 
-            $this->userManager->modifieUser($user, $password, $email, $visible, $code, $numTel,$fichierPhotoProfil);
+            if ($form->get('code')->getData() !== '' && $form->get('code')->getData() !== null) {
+                $code = $form->get('code')->getData();
+                $this->userManager->modifieUser($user, $password, $email, $visible, $code, $numTel,$fichierPhotoProfil);
+            }
+            else {
+                $this->userManager->modifieUser($user, $password, $email, $visible, null, $numTel,$fichierPhotoProfil);
+            }
+
+
             $this->entityManager->flush();
             $this->addFlash('success',"L'utilisateur a été modifié");
             return $this->redirectToRoute('app_home');
@@ -104,8 +120,18 @@ class UtilisateurController extends AbstractController
         ]);
     }
 
-    #[Route('/verification/code/{code}', name: 'verifCodeUser', options: ['expose' => true])]
-    public function verificationCodeUtilisateur(string $code): Response
+    #[Route('/verification/edition/code/{code}', name: 'verifEditionCodeUser', options: ['expose' => true])]
+    public function verificationEditionCodeUtilisateur(string $code): Response
+    {
+        $userExist = $this->utilisateurRepository->findOneBy(['code' => $code]);
+        if ($userExist && $userExist != $this->security->getUser()) {
+            return new JsonResponse(['error' => 'Code déjà utilisé'], 400);
+        }
+        return new JsonResponse([],204);
+    }
+
+    #[Route('/verification/creation/code/{code}', name: 'verifCreationCodeUser', options: ['expose' => true])]
+    public function verificationCreationCodeUtilisateur(string $code): Response
     {
         $userExist = $this->utilisateurRepository->findOneBy(['code' => $code]);
         if ($userExist) {
@@ -113,4 +139,5 @@ class UtilisateurController extends AbstractController
         }
         return new JsonResponse([],204);
     }
+
 }

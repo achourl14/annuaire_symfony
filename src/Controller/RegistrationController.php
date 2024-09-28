@@ -21,7 +21,7 @@ class RegistrationController extends AbstractController
 
 
     public function __construct(
-        private UtilisateurRepository $utilisateurRepository,
+        private UtilisateurRepository $utilisateurRepository, private readonly Security $security,
     )
     {
     }
@@ -57,6 +57,68 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
+    }
+
+
+    #[Route('/verification/creation/email/{email}', name: 'verifCreationEmailUser', options: ['expose' => true])]
+    public function verificationCreationEmailUtilisateur(string $email): Response
+    {
+        $userExist = $this->utilisateurRepository->findOneBy(['email' => $email]);
+        if ($userExist) {
+            return new JsonResponse(['error' => 'Email déjà utilisé'], 400);
+        }
+        elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new JsonResponse(['error' => 'Email non valide'], 400);
+        }
+        return new JsonResponse([],204);
+    }
+
+    #[Route('/verification/edition/email/{email}', name: 'verifEditionEmailUser', options: ['expose' => true])]
+    public function verificationEditionEmailUtilisateur(string $email): Response
+    {
+        $userExist = $this->utilisateurRepository->findOneBy(['email' => $email]);
+        if ($userExist && $userExist != $this->security->getUser()) {
+            return new JsonResponse(['error' => 'Email déjà utilisé'], 400);
+        }
+        elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new JsonResponse(['error' => 'Email non valide'], 400);
+        }
+        return new JsonResponse([],204);
+    }
+
+//    verifie que le mdp suit le regex suivant new NotBlank(),
+//                    new NotNull(),
+//                    new Length([
+//                        'min' => 8,
+//                        'max' => 30,
+//                        'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères',
+//                        'maxMessage' => 'Le mot de passe doit contenir au maximum {{ limit }} caractères'
+//                    ]),
+//                    new Regex([
+//                        'pattern' => '#^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,30}$#',
+//                        'message' => 'Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre'
+//                    ])
+
+    #[Route('/verification/creation/password/{password}', name: 'verifCreationPasswordUser', options: ['expose' => true])]
+    public function verificationCreationPasswordUtilisateur(string $password): Response
+    {
+        // Vérifie si le mot de passe respecte le pattern de la regex
+        if (!preg_match('#^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,30}$#', $password)) {
+            return new JsonResponse(['error' => 'Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre'], 400);
+        }
+
+        return new JsonResponse([], 204); // Si la vérification passe, retourne une réponse vide avec le code 204
+    }
+
+
+    #[Route('/verification/login/{login}', name: 'verifLoginUser', options: ['expose' => true])]
+    public function verificationLoginUtilisateur(string $login): Response
+    {
+        $userExist = $this->utilisateurRepository->findOneBy(['login' => $login]);
+        if ($userExist) {
+            return new JsonResponse(['error' => 'Login déjà utilisé'], 400);
+        }
+        return new JsonResponse([],204);
     }
 
     #[Route('/verification/code/{code}', name: 'verifCodeUser', options: ['expose' => true])]

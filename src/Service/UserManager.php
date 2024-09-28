@@ -27,20 +27,20 @@ class UserManager implements UserManagerInterface
     public function manageCodeUser(Utilisateur $user, ?string $code) : void
     {
         $generatedCode = $code;
-       if ($code === null) {
-           // genere un code aléaatoire en te basant sur la date du jour sans les / et les - et les : du style 18092024 + l'id de l'utilisateur
-           do {
-               $generatedCode = uniqid('', true);
-               $generatedCode = preg_replace("/[^A-Za-z0-9 ]/", '', $generatedCode);
-               $utilisateur = $this->utilisateurRepository->findOneBy(['code' => $generatedCode]);
-           } while($utilisateur !== null);
+        if ($code === null) {
+            // genere un code aléaatoire en te basant sur la date du jour sans les / et les - et les : du style 18092024 + l'id de l'utilisateur
+            do {
+                $generatedCode = uniqid('', true);
+                $generatedCode = preg_replace("/[^A-Za-z0-9 ]/", '', $generatedCode);
+                $utilisateur = $this->utilisateurRepository->findOneBy(['code' => $generatedCode]);
+            } while($utilisateur !== null);
 
-           //$generatedCode = date('dmY') . $user->getId();
-       }
-       $user->setCode($generatedCode);
+            //$generatedCode = date('dmY') . $user->getId();
+        }
+        $user->setCode($generatedCode);
     }
 
-    private function sauvegarderPhotoProfil(Utilisateur $utilisateur, ?UploadedFile $fichierPhotoProfil) : void {
+    public function sauvegarderPhotoProfil(Utilisateur $utilisateur, ?UploadedFile $fichierPhotoProfil) : void {
         if($fichierPhotoProfil != null) {
             //On configure le nom de l'image à sauvegarder
             //On la déplace vers son dossier de destination
@@ -67,14 +67,21 @@ class UserManager implements UserManagerInterface
         return $user;
     }
 
-    public function modifieUser($user, string $password, string $email, bool $visible, string $codeUser, $numTelephone,?UploadedFile $fichierPhotoProfil): Utilisateur
+    public function modifieUser($user, string $password, string $email, bool $visible, ?string $codeUser, $numTelephone,?UploadedFile $fichierPhotoProfil): Utilisateur
     {
         $user->setEmail($email);
         $user->setVisible($visible);
         $user->setUpdatedAt(new \DateTimeImmutable());
         $user->setNumTelephone($numTelephone);
         $this->sauvegarderPhotoProfil($user, $fichierPhotoProfil);
-        $this->manageCodeUser($user, $codeUser);
+
+//        dd($codeUser === null || $codeUser === '');
+        if ($codeUser === null || $codeUser === '') {
+            $this->manageCodeUser($user, $codeUser);
+        }
+        else {
+            $user->setCode($codeUser);
+        }
 
         if (!empty($password)) {
             $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));

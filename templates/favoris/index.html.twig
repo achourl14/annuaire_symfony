@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes favoris{% endblock %}
+
+{% block body %}
+<div class="p-8 flex flex-col">
+    <div class="self-center">
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+            </div>
+            <input
+                    type="search"
+                    id="user-search"
+                    class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Chercher un utilisateur par son login..."
+                    name="query"
+                    data-model="query"
+            >
+        </div>
+    </div>
+    <div id="user-list" class="container w-2/3 self-center justify-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 pr-0">
+        {% for favori in favoris %}
+            {% set user = favori.utilisateurFavoris %}
+            {% if is_granted('ROLE_ADMIN') or user.isVisible() %}
+                <div data-userlogin="{{ user.login }}" data-userid="{{ user.id }}" class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-10">
+                    <div class="flex justify-end px-4 pt-4">
+                        {# Dropdown menu #}
+                        <button id="dropdownButton" data-dropdown-toggle="dropdown-{{ user.id }}" class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
+                            <span class="sr-only">Open dropdown</span>
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
+                                <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"></path>
+                            </svg>
+                        </button>
+                        <div id="dropdown-{{ user.id }}" class="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2" aria-labelledby="dropdownButton">
+                                <li>
+                                    <a href="#" data-id="{{ user.id }}" class="delete-btn block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Voir le profil</a>
+                                </li>
+                                {% if is_granted('ROLE_ADMIN') and not user.isAdmin() %}
+                                    <li>
+                                        <a href="{{ path('app_form_removeUser', {code: user.code}) }}" data-id="{{ user.id }}" class="delete-btn block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Supprimer</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center pb-10">
+                        {% if not user.nomPhotoProfil %}
+                            <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="{{ asset('img/utilisateurs/' ~ 'anonyme.jpg')}}" alt="Anonyme"/>
+                        {% else %}
+                            <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="{{ asset('img/utilisateurs/uploads/' ~ user.nomPhotoProfil) }}" alt="Photo de profil"/>
+                        {% endif %}
+                        <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ user.login }}</h5>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">@{{ user.login }}</span>
+                        <div class="flex mt-4 md:mt-6">
+                            <a href="{{ path('detailProfil', {code: user.code }) }}" class="ml-4 inline-flex items-center px-4 py-2 text-sm font-medium text-center text-blue-700 bg-white border border-blue-700 rounded-lg hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-white dark:hover:from-blue-600 dark:hover:to-blue-700 dark:hover:text-white dark:focus:ring-blue-800">
+                            Voir le profil
+                            </a>
+                            {# suppression utilisateur #}
+                            <a href="{{ path('app_supprimer_favoris', {id : user.id}) }}" class="ml-4 inline-flex items-center px-4 py-2 text-sm font-medium text-center text-blue-700 bg-white border border-blue-700 rounded-lg hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-white dark:hover:from-blue-600 dark:hover:to-blue-700 dark:hover:text-white dark:focus:ring-blue-800">
+                            Supprimer des favoris
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
