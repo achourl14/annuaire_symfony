@@ -101,7 +101,6 @@ class UtilisateurController extends AbstractController
             'modificationForm' => $form,
             'utilisateur' => $user,
         ]);
-
     }
 
     #[Route('/profil/{code}',name:'detailProfil',methods: 'GET')]
