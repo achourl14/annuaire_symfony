@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Utilisateur;
+use App\Repository\UtilisateurRepository;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -14,6 +15,7 @@ class UserManager implements UserManagerInterface
 
     public function __construct(
         private UserPasswordHasherInterface $userPasswordHasher,
+        private UtilisateurRepository $utilisateurRepository,
         #[Autowire('%dossier_photo_profils%')] private string $dossier_photo_profils
     )
     {
@@ -26,8 +28,14 @@ class UserManager implements UserManagerInterface
     {
         $generatedCode = $code;
        if ($code === null) {
-//           genere un code aléaatoire en te basant sur la date du jour sans les / et les - et les : du style 18092024 + l'id de l'utilisateur
-           $generatedCode = date('dmY') . $user->getId();
+           // genere un code aléaatoire en te basant sur la date du jour sans les / et les - et les : du style 18092024 + l'id de l'utilisateur
+           do {
+               $generatedCode = uniqid('', true);
+               $generatedCode = preg_replace("/[^A-Za-z0-9 ]/", '', $generatedCode);
+               $utilisateur = $this->utilisateurRepository->findOneBy(['code' => $generatedCode]);
+           } while($utilisateur !== null);
+
+           //$generatedCode = date('dmY') . $user->getId();
        }
        $user->setCode($generatedCode);
     }

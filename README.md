@@ -37,7 +37,7 @@ DATABASE_URL=mysql://root:root@db:3306/annuaire
 > [!NOTE]
 > Si une base de données du nom d'*annuaire* existe déjà au sein de la BDD du conteneur Docker, pensez à la renommer ou, au cas échéant, à changer la cible de *DATABASE_URL*.
 
-3) Dans le terminal du conteneur Docker (via Docker Desktop ou via la CLI), se placer dans le dossier `/shared/public_html/s5_proj1` et exécuter les commandes suivantes:
+3) Dans le terminal du conteneur Docker (via Docker Desktop ou via la CLI), se placer dans le dossier `/shared/public_html/s5-web-projet1` et exécuter les commandes suivantes:
 ```shell
 composer install
 php bin/console doctrine:database:create
