@@ -20,6 +20,16 @@
                 {% if utilisateur.numTelephone %}
                 <p class="text-gray-600"><strong>Téléphone:</strong> {{ utilisateur.numTelephone }}</p>
                 {% endif %}
+                <p class="text-gray-600">
+                    <strong>Date de connexion:</strong> {{ app.user.connectedAt | date('d/m H:i') }}
+                </p>
+                {% if app.user.updatedAt %}
+                    <p class="text-gray-600">
+                        <strong>Date de mise à jour du profil:</strong> {{ app.user.updatedAt | date('d/m H:i') }}
+                    </p>
+                {% endif %}
+
+
             </div>
             <div class="flex justify-center mt-4 md:mt-6">
                 <a href="{{ path('app_home') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Accueil</a>
