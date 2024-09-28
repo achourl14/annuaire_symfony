@@ -40,6 +40,8 @@ DATABASE_URL=mysql://root:root@db:3306/annuaire
 3) Dans le terminal du conteneur Docker (via Docker Desktop ou via la CLI), se placer dans le dossier `/shared/public_html/s5-web-projet1` et exécuter les commandes suivantes:
 ```shell
 composer install
+# Le composer install a tendance à se figer à l'étape du clear cache, si c'est le cas, redémarrer Docker
+# puis relancer la commande afin que la configuration se finisse correctement
 php bin/console doctrine:database:create
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate
@@ -136,16 +138,19 @@ Dans les grandes lignes:
   - Connexion
   - Inscription
   - CSS
+  - Favoris
 - Lisa A.:
   - Supprimer son profil
   - Modifier son profil
   - Messages flash
   - Détails du profil
+  - Fixtures
 - Ilan V.:
   - Liste des utilisateurs (page d'accueil)
   - Mode maintenance
-  - Commandes
+  - Commande `app:make-user`
   - Gestion du rôle administrateur
   - Routes JSON
+  - (et le présent readme)
 
 Pour plus de détails, voir les commits, les pull requests et le [Trello](https://github.com/orgs/projets-xil/projects/1).
