@@ -1,17 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Accueil{% endblock %}
+
+{% block customImports %}
+    <script defer src="{{ asset('js/user_search.js') }}"></script>
+{% endblock %}
 
 {% block body %}
-
-
-<div class="example-wrapper text-red-500">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/ubuntu/dev/annuaire/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>/home/ubuntu/dev/annuaire/templates/home/index.html.twig</code></li>
-    </ul>
-</div>
+    {{ component('RechercheUtilisateur') }}
 {% endblock %}

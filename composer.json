@@ -11,8 +11,10 @@
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.2",
+        "friendsofsymfony/jsrouting-bundle": "^3.5",
         "phpdocumentor/reflection-docblock": "^5.4",
         "phpstan/phpdoc-parser": "^1.30",
+        "symfony/apache-pack": "^1.0",
         "symfony/asset": "6.4.*",
         "symfony/console": "6.4.*",
         "symfony/doctrine-messenger": "6.4.*",
@@ -20,7 +22,6 @@
         "symfony/expression-language": "6.4.*",
         "symfony/flex": "^2",
         "symfony/form": "6.4.*",
-        "symfony/framework-bundle": "6.4.*",
         "symfony/http-client": "6.4.*",
         "symfony/intl": "6.4.*",
         "symfony/mailer": "6.4.*",
@@ -37,11 +38,13 @@
         "symfony/string": "6.4.*",
         "symfony/translation": "6.4.*",
         "symfony/twig-bundle": "6.4.*",
+        "symfony/ux-live-component": "^2.19",
         "symfony/ux-turbo": "^2.19",
         "symfony/validator": "6.4.*",
         "symfony/web-link": "6.4.*",
         "symfony/webpack-encore-bundle": "^2.1",
         "symfony/yaml": "6.4.*",
+        "symfonycasts/tailwind-bundle": "^0.6.0",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -75,7 +78,8 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"
