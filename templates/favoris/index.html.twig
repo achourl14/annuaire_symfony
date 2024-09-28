@@ -1,5 +1,9 @@
-{# Source: https://flowbite.com/docs/components/card/#user-profile-card #}
-<div {{ attributes }} class="p-8 flex flex-col">
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FavorisController!{% endblock %}
+
+{% block body %}
+<div class="p-8 flex flex-col">
     <div class="self-center">
         <div class="relative">
             <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
@@ -16,34 +20,32 @@
         </div>
     </div>
     <div id="user-list" class="container w-2/3 self-center justify-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 pr-0">
-        {% for user in this.data %}
+        {% for favori in favoris %}
+            {% set user = favori.utilisateurFavoris %}
             {% if is_granted('ROLE_ADMIN') or user.isVisible() %}
                 <div data-userlogin="{{ user.login }}" data-userid="{{ user.id }}" class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-10">
                     <div class="flex justify-end px-4 pt-4">
                         {# Dropdown menu #}
-                            <button id="dropdownButton" data-dropdown-toggle="dropdown-{{ user.id }}" class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
-                                <span class="sr-only">Open dropdown</span>
-                                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
-                                    <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"></path>
-                                </svg>
-                            </button>
-                            <div id="dropdown-{{ user.id }}" class="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                <ul class="py-2" aria-labelledby="dropdownButton">
-                                    {# TODO: pointer vers la route voir profil #}
-                                    <li>
-                                        <a href="{{ path('detailProfil', {code : user.code }) }}" data-id="{{ user.id }}" class="delete-btn block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Voir le profil</a>
-                                    </li>
-                                    {% if is_granted('ROLE_ADMIN') and not user.isAdmin() %}
+                        <button id="dropdownButton" data-dropdown-toggle="dropdown-{{ user.id }}" class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
+                            <span class="sr-only">Open dropdown</span>
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
+                                <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"></path>
+                            </svg>
+                        </button>
+                        <div id="dropdown-{{ user.id }}" class="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2" aria-labelledby="dropdownButton">
+                                <li>
+                                    <a href="#" data-id="{{ user.id }}" class="delete-btn block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Voir le profil</a>
+                                </li>
+                                {% if is_granted('ROLE_ADMIN') and not user.isAdmin() %}
                                     <li>
                                         <a href="{{ path('app_form_removeUser', {code: user.code}) }}" data-id="{{ user.id }}" class="delete-btn block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Supprimer</a>
                                     </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        {# End dropdown #}
+                                {% endif %}
+                            </ul>
+                        </div>
                     </div>
                     <div class="flex flex-col items-center pb-10">
-                        {# Profile pic #}
                         {% if not user.nomPhotoProfil %}
                             <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="{{ asset('img/utilisateurs/' ~ 'anonyme.jpg')}}" alt="Anonyme"/>
                         {% else %}
@@ -52,16 +54,9 @@
                         <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ user.login }}</h5>
                         <span class="text-sm text-gray-500 dark:text-gray-400">@{{ user.login }}</span>
                         <div class="flex mt-4 md:mt-6">
-                            {# TODO: pointer vers la route voir profil #}
                             <a href="{{ path('detailProfil', {code: user.code }) }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Voir le profil</a>
-                            {% set favorisIds = app.user.profilFavoris|map(favori => favori.utilisateurFavoris.id) %}
-
-                            {% if user.id != app.user.id and user.id not in favorisIds %}
-                                <a href="{{ path('app_ajouter_favoris', {id: user.id}) }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    Ajouter aux favoris
-                                </a>
-                            {% endif %}
-
+{#                            suppression utilisateur #}
+                            <a href="{{ path('app_supprimer_favoris', {id : user.id}) }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Supprimer des favoris</a>
                         </div>
                     </div>
                 </div>
@@ -69,3 +64,5 @@
         {% endfor %}
     </div>
 </div>
+
+{% endblock %}
