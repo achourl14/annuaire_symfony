@@ -51,7 +51,8 @@ class FavorisController extends AbstractController
 
         $this->entityManager->persist($profilFavoris);
         $this->entityManager->flush();
-        return $this->redirectToRoute('app_favoris');
+        $this->addFlash('success',"L'utilisateur a été mis en favoris");
+        return $this->redirectToRoute('app_home');
     }
 
     #[Route('/supprimer/favoris/{id}', name: 'app_supprimer_favoris')]
@@ -61,6 +62,7 @@ class FavorisController extends AbstractController
         $profilFavoris = $this->profilFavorisRepository->findOneBy(['utilisateur' => $this->getUser(), 'utilisateurFavoris' => $this->utilisateurRepository->find($id)]);
         $this->entityManager->remove($profilFavoris);
         $this->entityManager->flush();
+        $this->addFlash('success',"L'utilisateur a été supprimé des favoris");
         return $this->redirectToRoute('app_favoris');
     }
 }
