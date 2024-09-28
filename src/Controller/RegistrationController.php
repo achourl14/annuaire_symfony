@@ -59,6 +59,40 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+
+    #[Route('/verification/email/{email}', name: 'verifEmailUser', options: ['expose' => true])]
+    public function verificationEmailUtilisateur(string $email): Response
+    {
+        $userExist = $this->utilisateurRepository->findOneBy(['email' => $email]);
+        if ($userExist) {
+            return new JsonResponse(['error' => 'Email déjà utilisé'], 400);
+        }
+//        l'email doi respecter le regex suivant 'constraints' => [
+//                    new NotBlank(),
+//                    new NotNull(),
+//                    new Regex(
+//                        [
+//                            'pattern' => '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+//                            'message' => 'L\'adresse email n\'est pas valide'
+//                        ]
+//                    )
+//                ]
+        elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new JsonResponse(['error' => 'Email non valide'], 400);
+        }
+        return new JsonResponse([],204);
+    }
+
+    #[Route('/verification/login/{login}', name: 'verifLoginUser', options: ['expose' => true])]
+    public function verificationLoginUtilisateur(string $login): Response
+    {
+        $userExist = $this->utilisateurRepository->findOneBy(['login' => $login]);
+        if ($userExist) {
+            return new JsonResponse(['error' => 'Login déjà utilisé'], 400);
+        }
+        return new JsonResponse([],204);
+    }
+
     #[Route('/verification/code/{code}', name: 'verifCodeUser', options: ['expose' => true])]
     public function verificationCodeUtilisateur(string $code): Response
     {
