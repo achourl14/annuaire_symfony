@@ -173,6 +173,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->updatedAt;
     }
 
+    #[ORM\PostUpdate]
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
@@ -192,11 +193,17 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getVisible(): ?bool
+    {
+        return $this->visible;
+    }
+
     public function getConnectedAt(): ?\DateTimeImmutable
     {
         return $this->connectedAt;
     }
 
+    #[ORM\PostUpdate]
     public function setConnectedAt(?\DateTimeImmutable $connectedAt): static
     {
         $this->connectedAt = $connectedAt;
