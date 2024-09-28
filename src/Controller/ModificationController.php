@@ -65,7 +65,7 @@ class ModificationController extends AbstractController
         }
 
         if ($loggedInUser->isAdmin()) {
-            if ($utilisateur->isAdmin()) {
+            if ($utilisateur->isAdmin() && $loggedInUser->getId() != $utilisateur->getId()) {
                 $this->addFlash('error', "L'utilisateur que vous essayez de supprimer est également un administrateur.");
                 return $this->redirectToRoute('app_home');
             }
@@ -76,14 +76,14 @@ class ModificationController extends AbstractController
             }
         }
 
-        return $this->render('modification/suppressionUtilisateur.html.twig', [
+        return $this->render('utilisateur/suppressionUtilisateur.html.twig', [
             'utilisateur' => $utilisateur,
         ]);
     }
 
     #[Route('/utilisateurs/{code}/supprimer', name: 'app_removeUser', options: ["expose" => true],methods: ['POST','DELETE'])]
     #[IsGranted("ROLE_USER")]
-    public function removeUser(?Utilisateur $utilisateur, EntityManagerInterface $entityManager): Response
+    public function removeUser(?Utilisateur $utilisateur, EntityManagerInterface $entityManager, Request $request): Response
     {
         if ($utilisateur == null) {
             $this->addFlash('error',"L'utilisateur n'existe pas");
@@ -107,6 +107,15 @@ class ModificationController extends AbstractController
                 $this->addFlash('error', "Vous n'avez pas la permission de supprimer un autre utilisateur.");
                 return $this->redirectToRoute('app_home');
             }
+        }
+
+        if ($loggedInUser->getId() == $utilisateur->getId()) {
+            $this->container->get('security.token_storage')->setToken(null);
+            $request->getSession()->invalidate();
+            $this->addFlash('success',"Votre profil a été supprimé.");
+            $entityManager->remove($utilisateur);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_logout');
         }
 
         $entityManager->remove($utilisateur);

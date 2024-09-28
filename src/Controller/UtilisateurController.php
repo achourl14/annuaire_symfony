@@ -87,28 +87,6 @@ class UtilisateurController extends AbstractController
         ]);
 
     }
-    #[Route('/formSuppressionUtilisateur/{id}', name: 'app_form_removeUser')]
-    #[IsGranted("ROLE_USER")]
-    public function afficherFormSuppression(?Utilisateur $utilisateur): Response
-    {
-
-        $utilisateur = $this->getUser();
-        return $this->render('utilisateur/suppressionUtilisateur.html.twig', [
-            'utilisateur' => $utilisateur,
-        ]);
-    }
-
-    #[Route('/supprimerUtilisateur/{id}', name: 'app_removeUser',options: ["expose" => true],methods: ['GET','DELETE'])]
-    #[IsGranted("ROLE_USER")]
-    public function removeUser(EntityManagerInterface $entityManager): Response
-    {
-        $utilisateur = $this->getUser();
-        $entityManager->remove($utilisateur);
-        $entityManager->flush();
-        $this->addFlash('success',"L'utilisateur a été supprimé");
-        return $this->redirectToRoute('app_home');
-    }
-
 
     #[Route('/profil/{code}',name:'detailProfil',methods: 'GET')]
     public function pagePerso(string $code) : Response
