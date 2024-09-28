@@ -60,6 +60,16 @@ symfony console tailwind:build
 ### Configuration
 Une configuration générique des variables d'environnement se trouve dans le fichier `.env`. Si vous avez besoin d'y apporter des modifications, créez et utilisez le fichier `.env.local`. 
 
+### Fixtures
+
+- Commande pour charger les données, cela générera 100 utilisateurs, il suffit de la lancer 1 seule fois pour les créer
+```
+php bin/console doctrine:fixtures:load --purge
+```
+Les utilisateurs ont par défaut un login utilisateur[1..100] et un mot de passe password[1..100] \
+Exemple: pour se connecter au compte de l'utilisateur 1 il faut entrer comme login utilisateur1 et comme mot de passe password1
+
+
 ## Fonctionnement de l'annuaire
 Pour accéder à la page d'accueil, simplement accéder à la route `/` (probablement [via ce lien](https://localhost/s5-web-projet1/public) si vous utilisez le docker but3-web-container).
 
