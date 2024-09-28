@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const emailInput = document.querySelector('input[name="registration_form[email]"]');
-  const submitButton = document.querySelector('#submit-button');
-  const formEmail = document.querySelector('#form-email');
+  const emailInput = document.querySelector('input[name="modification_utilisateur[email]"]'); // Correspond à l'input de l'email
+  const submitButton = document.querySelector('#modification-submit-button'); // Le bouton de soumission pour le formulaire de modification
+  const formEmail = document.querySelector('#modification-form-email'); // Conteneur de l'input de l'email
   let errorMessageElement = null;
 
   emailInput.addEventListener('input', function() {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    fetch(Routing.generate('verifCreationEmailUser', { email: email }), { method: 'GET' })
+    fetch(Routing.generate('verifEditionEmailUser', { email: email }), { method: 'GET' })
       .then(response => {
         if (response.status === 204) {
           if (errorMessageElement) {

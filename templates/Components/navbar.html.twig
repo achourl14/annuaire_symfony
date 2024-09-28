@@ -54,17 +54,19 @@
 {#        <div class="z-50 hidden my-4 text-base list-none bg-[#24569b] divide-y divide-white rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">#}
             <div class="px-4 py-3" id="user-dropdown">
                 <div class="weather flex min-h-[10em] min-w-[16em] flex-col items-center justify-center gap-[0.5em] rounded-[1.5em] bg-[#24569b] px-[1em] py-[0.5em] font-nunito text-white shadow-[0px_4px_16px_0px_#222]">
-                    <div class="flex h-fit w-full items-center justify-center gap-[1em]">
+                    <div class="flex h-fit w-full items-center gap-[1em]">
                         <img class="w-8 h-8" src="{{ asset('img/login.svg') }}" alt="imgProfil">
                         <span class="h-[4em] w-[1px] rounded-full bg-white"></span>
                         <div class="flex flex-col items-start justify-center">
                             <p class="text-[1rem] font-light">@{{ app.user.login }}</p>
-                            <p class="text-[1em] font-semibold">{{ app.user.email }}</p>
+                            <p class="text-[1rem] font-light">Code @{{ app.user.code }}</p>
                             <div class="flex items-center justify-center gap-[0.125em]">
                                 {% if app.user.numTelephone %}
-                                    <p class="text-[1rem] font-light">{{ app.user.numTelephone }}</p>
+                                    <p class="text-[1rem] font-light">Tel @{{ app.user.numTelephone }}</p>
                                 {% endif %}
                             </div>
+                            <p class="text-[1em] font-semibold">{{ app.user.email }}</p>
+
                         </div>
                     </div>
                     <div class="h-[0.5px] w-full rounded-full bg-white"></div>

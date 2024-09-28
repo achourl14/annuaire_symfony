@@ -56,9 +56,8 @@ class ModificationUtilisateurType extends AbstractType
                 'mapped' => false
             ])
             ->add('newPassword', PasswordType::class, [
+                'required' => false,
                 'constraints' => [
-                    new NotBlank(),
-                    new NotNull(),
                     new Length([
                         'min' => 8,
                         'max' => 30,

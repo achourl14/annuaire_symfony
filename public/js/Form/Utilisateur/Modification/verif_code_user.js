@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const codeInput = document.querySelector('input[name="registration_form[code]"]'); // Correspond à l'input du code
-  const submitButton = document.querySelector('#submit-button'); // Le bouton de soumission
-  const form = document.querySelector('form[name="registration_form"]'); // Le formulaire
-  const formCode = document.querySelector('#form-code'); // Conteneur de l'input du code
+  const codeInput = document.querySelector('input[name="modification_utilisateur[code]"]'); // Correspond à l'input du code dans le formulaire de modification
+  const submitButton = document.querySelector('#submit-modif-button'); // Le bouton de soumission pour le formulaire de modification
+  const form = document.querySelector('form[name="modification_utilisateur"]'); // Le formulaire de modification
+  const formCode = document.querySelector('#modification-form-code'); // Conteneur de l'input du code
   let errorMessageElement = null;
 
   codeInput.addEventListener('input', function() {
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    fetch(Routing.generate('verifCreationCodeUser', { code: code }), {
+    fetch(Routing.generate('verifEditionCodeUser', { code: code }), {
       method: 'GET',
     })
       .then(response => {

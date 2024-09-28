@@ -68,7 +68,11 @@ class UtilisateurController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->get('email')->getData();
-            $password = $form->get('newPassword')->getData();
+            if ($password = $form->get('newPassword')->getData() != null) {
+                $password = $form->get('newPassword')->getData();
+            } else {
+                $password = $form->get('oldPassword')->getData();
+            }
             $visible = $form->get('visible')->getData();
             $code = $form->get('code')->getData();
             $numTel = $form->get('numTelephone')->getData();
@@ -104,8 +108,18 @@ class UtilisateurController extends AbstractController
         ]);
     }
 
-    #[Route('/verification/code/{code}', name: 'verifCodeUser', options: ['expose' => true])]
-    public function verificationCodeUtilisateur(string $code): Response
+    #[Route('/verification/edition/code/{code}', name: 'verifEditionCodeUser', options: ['expose' => true])]
+    public function verificationEditionCodeUtilisateur(string $code): Response
+    {
+        $userExist = $this->utilisateurRepository->findOneBy(['code' => $code]);
+        if ($userExist && $userExist != $this->security->getUser()) {
+            return new JsonResponse(['error' => 'Code déjà utilisé'], 400);
+        }
+        return new JsonResponse([],204);
+    }
+
+    #[Route('/verification/creation/code/{code}', name: 'verifCreationCodeUser', options: ['expose' => true])]
+    public function verificationCreationCodeUtilisateur(string $code): Response
     {
         $userExist = $this->utilisateurRepository->findOneBy(['code' => $code]);
         if ($userExist) {
@@ -113,4 +127,5 @@ class UtilisateurController extends AbstractController
         }
         return new JsonResponse([],204);
     }
+
 }
