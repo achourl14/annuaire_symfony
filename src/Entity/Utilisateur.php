@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -56,6 +58,17 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $numTelephone = null;
+
+    /**
+     * @var Collection<int, ProfilFavoris>
+     */
+    #[ORM\OneToMany(targetEntity: ProfilFavoris::class, mappedBy: 'utilisateur', orphanRemoval: true)]
+    private Collection $profilFavoris;
+
+    public function __construct()
+    {
+        $this->profilFavoris = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -249,6 +262,36 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNumTelephone(?string $numTelephone): static
     {
         $this->numTelephone = $numTelephone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProfilFavoris>
+     */
+    public function getProfilFavoris(): Collection
+    {
+        return $this->profilFavoris;
+    }
+
+    public function addProfilFavori(ProfilFavoris $profilFavori): static
+    {
+        if (!$this->profilFavoris->contains($profilFavori)) {
+            $this->profilFavoris->add($profilFavori);
+            $profilFavori->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfilFavori(ProfilFavoris $profilFavori): static
+    {
+        if ($this->profilFavoris->removeElement($profilFavori)) {
+            // set the owning side to null (unless already changed)
+            if ($profilFavori->getUtilisateur() === $this) {
+                $profilFavori->setUtilisateur(null);
+            }
+        }
 
         return $this;
     }
