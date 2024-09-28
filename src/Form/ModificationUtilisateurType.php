@@ -56,9 +56,8 @@ class ModificationUtilisateurType extends AbstractType
                 'mapped' => false
             ])
             ->add('newPassword', PasswordType::class, [
+                'required' => false,
                 'constraints' => [
-                    new NotBlank(),
-                    new NotNull(),
                     new Length([
                         'min' => 8,
                         'max' => 30,
@@ -83,6 +82,7 @@ class ModificationUtilisateurType extends AbstractType
             ->add('code', TextType::class,
                 [
                     'required' => false,
+                    'empty_data' => '',  // Définit explicitement `null` si le champ est vide
                 ])
             ->add('numTelephone', TextType::class, [
                 'label' => 'Numéro de téléphone',
