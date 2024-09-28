@@ -74,6 +74,9 @@ Pour accéder à la page d'accueil, simplement accéder à la route `/` (probabl
 /api/utilisateurs/{code}
 ```
 
+### Autres routes
+![Capture d'écran de php bin/console debug:routes](public/img/routes.png)
+
 ### Liste des commandes
 
 > [!NOTE]
@@ -96,25 +99,26 @@ php bin/console app:make-user achourl
   - [X] Chaque profil doit être associé à un **code unique**. Pendant l’inscription, l’utilisateur peut choisir de préciser lui-même ce code ou non (à condition qu’il ne soit pas déjà pris). S’il ne précise rien, un code aléatoire sera alors généré. Quand l’utilisateur décide lui-même de saisir un code, l’application doit vérifier en temps réel que le code n’est pas déjà pris, avant la soumission du formulaire (donc, en utilisant du javascript et des requêtes asynchrones). Le code ne doit contenir que des caractères alphanumériques.
   - [X] Le profil de l’utilisateur possède un **mode de visibilité** qui indique s’il peut être publiquement listé ou non. Un profil peut donc être soit visible (listé) ou bien masqué (non listé).
 - [X] La **page principale** du site doit afficher tous les profils visibles.
-  - [ ] À partir de cette page, on doit aussi pouvoir accéder facilement aux **pages de profils des utilisateurs** listés.
-- [ ] Une **route incluant le code du profil** permet d’accéder et de visualiser la page de profil d’un utilisateur (par exemple /profil/{code}). Il n’y a pas besoin d’être connecté pour cela.
-  - [ ] Attention, même si le profil est masqué, il peut toujours être **consulté via l’adresse et le code du profil**. S’il est masqué, il n’est simplement pas listé sur la page principale.
+  - [X] À partir de cette page, on doit aussi pouvoir accéder facilement aux **pages de profils des utilisateurs** listés.
+- [X] Une **route incluant le code du profil** permet d’accéder et de visualiser la page de profil d’un utilisateur (par exemple /profil/{code}). Il n’y a pas besoin d’être connecté pour cela.
+  - [X] Attention, même si le profil est masqué, il peut toujours être **consulté via l’adresse et le code du profil**. S’il est masqué, il n’est simplement pas listé sur la page principale.
   - [X] En plus de la route qui permet de visualiser le profil de l’utilisateur sur une page dédiée, une autre route (qui inclue donc aussi le code secret du profil) doit **renvoyer les informations de l’utilisateur au format JSON** (donc, pas une page web complète, seulement les données). Cela vous servira plus tard, lors du 3ᵉ projet où vous utiliserez directement de ce service.
   - [X] Sur le profil, l’application doit afficher la **dernière date où a été édité le profil et la dernière date de connexion** de l’utilisateur.
-  - [ ] Attention, vous devrez faire en sorte que la dernière date d’édition du profil soit mise à jour dès que l’objet (entité) stockant l’utilisateur est mise à jour, peu importe l’endroit où cela est fait : dans un contrôleur, dans un service, dans une commande, etc. Il faut ainsi faire en sorte de ne pas avoir à dupliquer le code gérant cette logique si une nouvelle portion de code mettant à jour cette entité est implémentée.
-- [ ] Une fois connecté, l’utilisateur peut **éditer son profil** avec des informations complémentaires (par exemple, numéro de téléphone, pays, adresse postale, réseaux sociaux, etc.). À vous de trouver les données qui vous semblent intéressantes à préciser sur le profil.
-  - [ ] Le **formulaire d’édition** du profil doit être automatiquement **pré-rempli**.
-  - [ ] À tout moment, l’utilisateur peut **changer le code associé à son profil** (soit en spécifiant un nouveau, soit en demandant la génération d’un code aléatoire).
-  - [ ] L’utilisateur peut **supprimer son profil**.
-  - [ ] L’utilisateur peut **changer la visibilité de son profil** (de visible à masqué ou inversement).
+  - [X] Attention, vous devrez faire en sorte que la dernière date d’édition du profil soit mise à jour dès que l’objet (entité) stockant l’utilisateur est mise à jour, peu importe l’endroit où cela est fait : dans un contrôleur, dans un service, dans une commande, etc. Il faut ainsi faire en sorte de ne pas avoir à dupliquer le code gérant cette logique si une nouvelle portion de code mettant à jour cette entité est implémentée.
+- [X] Une fois connecté, l’utilisateur peut **éditer son profil** avec des informations complémentaires (par exemple, numéro de téléphone, pays, adresse postale, réseaux sociaux, etc.). À vous de trouver les données qui vous semblent intéressantes à préciser sur le profil.
+  - [X] Le **formulaire d’édition** du profil doit être automatiquement **pré-rempli**.
+  - [X] À tout moment, l’utilisateur peut **changer le code associé à son profil** (soit en spécifiant un nouveau, soit en demandant la génération d’un code aléatoire).
+  - [X] L’utilisateur peut **supprimer son profil**.
+  - [X] L’utilisateur peut **changer la visibilité de son profil** (de visible à masqué ou inversement).
 - [X] Certains utilisateurs peuvent **posséder le rôle d’administrateur**.
   - [X] Sur la page principale du site, en plus des profils visibles, un administrateur peut aussi visualiser et accéder aux profils masqués.
-  - [ ] Aussi, à partir d’un profil, un administrateur peut supprimer le compte de l’utilisateur qui possède ce profil, sauf si cet utilisateur est aussi un administrateur.
+  - [X] Aussi, à partir d’un profil, un administrateur peut supprimer le compte de l’utilisateur qui possède ce profil, sauf si cet utilisateur est aussi un administrateur.
 - [X] Le site doit pouvoir être passé en **mode maintenance** à l’aide d’un nouveau paramètre que vous pourrez définir et modifier dans le fichier services.yaml. Quand le site est en mode maintenance, toutes les pages du site doivent rediriger sur une page qui affiche un message expliquant que le site est actuellement en maintenance.
 - [X] Une **commande** (Symfony) doit permettre de **créer un utilisateur depuis le terminal** en précisant ses informations et son rôle (normal/administrateur). Les informations pourront être données directement en argument de la commande, ou alors en mode interactif.
 - [X] Seul le javascript “nature” est autorisé (pas de framework JS, juste de simples fichiers javascript, comme dans le TD3).
 
 ### Répartition du travail
+Dans les grandes lignes:
 - Xavier T.:
   - Mise en place du projet
   - Connexion
@@ -131,3 +135,5 @@ php bin/console app:make-user achourl
   - Commandes
   - Gestion du rôle administrateur
   - Routes JSON
+
+Pour plus de détails, voir les commits, les pull requests et le [Trello](https://github.com/orgs/projets-xil/projects/1).
