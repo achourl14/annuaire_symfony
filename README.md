@@ -41,12 +41,7 @@ DATABASE_URL=mysql://root:root@db:3306/annuaire
 ```shell
 composer install
 php bin/console doctrine:database:create
-# Une migration créant des tables pré-remplies est disponible.
-# Si cependant elle venait à ne pas fonctionner pour une raison ou une autre,
-# lancez les deux commandes suivantes:
-rm -rf ./migrations/* 
 php bin/console make:migration
-# Vous pouvez ensuite lancer cette commande:
 php bin/console doctrine:migrations:migrate
 ```
 
