@@ -25,11 +25,17 @@ class UserManager implements UserManagerInterface
     public function manageCodeUser(Utilisateur $user, ?string $code) : void
     {
         $generatedCode = $code;
-       if ($code === null) {
-//           genere un code aléaatoire en te basant sur la date du jour sans les / et les - et les : du style 18092024 + l'id de l'utilisateur
-           $generatedCode = date('dmY') . $user->getId();
-       }
-       $user->setCode($generatedCode);
+        if ($code === null) {
+            // genere un code aléaatoire en te basant sur la date du jour sans les / et les - et les : du style 18092024 + l'id de l'utilisateur
+            do {
+                $generatedCode = uniqid('', true);
+                $generatedCode = preg_replace("/[^A-Za-z0-9 ]/", '', $generatedCode);
+                $utilisateur = $this->utilisateurRepository->findOneBy(['code' => $generatedCode]);
+            } while($utilisateur !== null);
+
+            //$generatedCode = date('dmY') . $user->getId();
+        }
+        $user->setCode($generatedCode);
     }
 
     private function sauvegarderPhotoProfil(Utilisateur $utilisateur, ?UploadedFile $fichierPhotoProfil) : void {
