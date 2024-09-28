@@ -1,10 +1,34 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Vérification du code
+  // Récupération des éléments
   const codeInput = document.querySelector('input[name="modification_utilisateur[code]"]');
+  const emailInput = document.querySelector('input[name="modification_utilisateur[email]"]');
+  const phoneInput = document.querySelector('input[name="modification_utilisateur[numTelephone]"]');
+  const passwordInput = document.querySelector('input[name="modification_utilisateur[newPassword]"]');
   const submitButton = document.querySelector('#submit-modif-button');
-  const formCode = document.querySelector('#modification-form-code');
-  let errorMessageElementCode = null;
 
+  const formCode = document.querySelector('#modification-form-code');
+  const formEmail = document.querySelector('#modification-form-email');
+  const formPhone = document.querySelector('#modification-form-telephone');
+  const formPassword = document.querySelector('#modification-form-password');
+
+  let errorMessageElementCode = null;
+  let errorMessageElementEmail = null;
+  let errorMessageElementPhone = null;
+  let errorMessageElementPassword = null;
+
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\W]{8,30}$/; // Regex pour le mot de passe
+
+  function checkFormValidity() {
+    const codeValid = !errorMessageElementCode;
+    const emailValid = !errorMessageElementEmail;
+    const phoneValid = !errorMessageElementPhone;
+    const passwordValid = !errorMessageElementPassword;
+
+    // Désactive le bouton si l'un des champs est invalide
+    submitButton.disabled = !(codeValid && emailValid && phoneValid && passwordValid);
+  }
+
+  // Vérification du code
   codeInput.addEventListener('input', function() {
     const code = codeInput.value;
 
@@ -13,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formCode.removeChild(errorMessageElementCode);
         errorMessageElementCode = null;
       }
-      submitButton.disabled = false;
+      checkFormValidity();
       return;
     }
 
@@ -26,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
             formCode.removeChild(errorMessageElementCode);
             errorMessageElementCode = null;
           }
-          submitButton.disabled = false;
           return null;
         }
       })
@@ -38,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
             errorMessageElementCode.textContent = data.error;
             formCode.appendChild(errorMessageElementCode);
           }
-          submitButton.disabled = true;
         }
+        checkFormValidity(); // Vérifie l'état global après la vérification
       })
       .catch(error => {
         console.error('Erreur lors de la vérification du code:', error);
@@ -47,10 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Vérification de l'email
-  const emailInput = document.querySelector('input[name="modification_utilisateur[email]"]');
-  const formEmail = document.querySelector('#modification-form-email');
-  let errorMessageElementEmail = null;
-
   emailInput.addEventListener('input', function() {
     const email = emailInput.value;
 
@@ -59,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formEmail.removeChild(errorMessageElementEmail);
         errorMessageElementEmail = null;
       }
-      submitButton.disabled = false;
+      checkFormValidity();
       return;
     }
 
@@ -70,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             formEmail.removeChild(errorMessageElementEmail);
             errorMessageElementEmail = null;
           }
-          submitButton.disabled = false;
+          return null;
         } else {
           return response.json();
         }
@@ -83,8 +102,8 @@ document.addEventListener('DOMContentLoaded', function() {
             errorMessageElementEmail.textContent = data.error;
             formEmail.appendChild(errorMessageElementEmail);
           }
-          submitButton.disabled = true;
         }
+        checkFormValidity(); // Vérifie l'état global après la vérification
       })
       .catch(error => {
         console.error('Erreur lors de la vérification de l\'email:', error);
@@ -92,22 +111,25 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Vérification du numéro de téléphone
-  const phoneInput = document.querySelector('input[name="modification_utilisateur[telephone]"]');
-  const formPhone = document.querySelector('#modification-form-telephone');
-  let errorMessageElementPhone = null;
-
   const phoneRegex = /^(\+33|0)[1-9](\d{2}){4}$/; // Regex pour numéro de téléphone français
 
   phoneInput.addEventListener('input', function() {
     const phone = phoneInput.value;
 
-    if (phone.length === 0 || phoneRegex.test(phone)) {
+    if (phone.length === 0) {
       if (errorMessageElementPhone) {
         formPhone.removeChild(errorMessageElementPhone);
         errorMessageElementPhone = null;
       }
-      submitButton.disabled = false;
+      checkFormValidity();
       return;
+    }
+
+    if (phoneRegex.test(phone)) {
+      if (errorMessageElementPhone) {
+        formPhone.removeChild(errorMessageElementPhone);
+        errorMessageElementPhone = null;
+      }
     } else {
       if (!errorMessageElementPhone) {
         errorMessageElementPhone = document.createElement('span');
@@ -115,14 +137,52 @@ document.addEventListener('DOMContentLoaded', function() {
         errorMessageElementPhone.textContent = 'Numéro de téléphone invalide';
         formPhone.appendChild(errorMessageElementPhone);
       }
-      submitButton.disabled = true;
     }
+
+    checkFormValidity(); // Vérifie l'état global après la vérification
+  });
+
+  // Vérification du mot de passe
+  passwordInput.addEventListener('input', function() {
+    const password = passwordInput.value;
+
+    if (password.length === 0) {
+      if (errorMessageElementPassword) {
+        formPassword.removeChild(errorMessageElementPassword);
+        errorMessageElementPassword = null;
+      }
+      checkFormValidity();
+      return;
+    }
+
+    if (passwordRegex.test(password)) {
+      if (errorMessageElementPassword) {
+        formPassword.removeChild(errorMessageElementPassword);
+        errorMessageElementPassword = null;
+      }
+    } else {
+      if (!errorMessageElementPassword) {
+        errorMessageElementPassword = document.createElement('span');
+        errorMessageElementPassword.classList.add('text-red-500', 'text-sm');
+        errorMessageElementPassword.textContent = 'Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre';
+        formPassword.appendChild(errorMessageElementPassword);
+      }
+    }
+
+    checkFormValidity(); // Vérifie l'état global après la vérification
   });
 
   // Empêche la soumission du formulaire si un champ est invalide
   form.addEventListener('submit', function(event) {
-    if (submitButton.disabled) {
+    const codeValid = !errorMessageElementCode;
+    const emailValid = !errorMessageElementEmail;
+    const phoneValid = !errorMessageElementPhone;
+    const passwordValid = !errorMessageElementPassword;
+
+    // Si un des champs est invalide, empêche la soumission
+    if (!codeValid || !emailValid || !phoneValid || !passwordValid) {
       event.preventDefault();
+      alert("Veuillez corriger les erreurs dans le formulaire avant de soumettre.");
     }
   });
 });
