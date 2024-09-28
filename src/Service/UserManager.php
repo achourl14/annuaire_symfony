@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Utilisateur;
+use App\Repository\UtilisateurRepository;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -14,6 +15,7 @@ class UserManager implements UserManagerInterface
 
     public function __construct(
         private UserPasswordHasherInterface $userPasswordHasher,
+        private UtilisateurRepository $utilisateurRepository,
         #[Autowire('%dossier_photo_profils%')] private string $dossier_photo_profils
     )
     {
