@@ -18,7 +18,7 @@
 > Ce présent tutoriel part du principe que vous avez mis en place l'image Docker [but3-web-container](https://gitlabinfo.iutmontp.univ-montp2.fr/progweb-but3/docker).
  
 > [!IMPORTANT]
-> Ce projet contient des dépendances en plus de celles de Symfony, notamment Tailwind. Des étapes supplémentaires sont nécessaires pour que l'ensemble du projet fonctionne.
+> Ce projet contient des dépendances en plus de celles de Symfony, notamment npm et Tailwind. Des étapes supplémentaires sont nécessaires pour que l'ensemble du projet fonctionne.
 
 > [!IMPORTANT]
 > Si, pendant l'installation des dépendances de Symfony, on vous demande si vous souhaitez installer une recipe, **répondez oui**.
@@ -54,6 +54,8 @@ php bin/console doctrine:migrations:migrate
 ```shell
 php bin/console tailwind:init
 php bin/console tailwind:build
+npm i 
+npm run build
 ```
 
 > [!NOTE]
