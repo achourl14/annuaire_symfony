@@ -42,9 +42,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $numTelephone = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
@@ -56,6 +53,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $nomPhotoProfil = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $numTelephone = null;
 
     public function getId(): ?int
     {
@@ -156,17 +156,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getNumTelephone(): ?int
-    {
-        return $this->numTelephone;
-    }
-
-    public function setNumTelephone(?int $numTelephone): static
-    {
-        $this->numTelephone = $numTelephone;
-
-        return $this;
-    }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
@@ -250,5 +239,17 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isAdmin(): bool {
         return in_array('ROLE_ADMIN', $this->roles);
+    }
+
+    public function getNumTelephone(): ?string
+    {
+        return $this->numTelephone;
+    }
+
+    public function setNumTelephone(?string $numTelephone): static
+    {
+        $this->numTelephone = $numTelephone;
+
+        return $this;
     }
 }
