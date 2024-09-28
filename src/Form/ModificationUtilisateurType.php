@@ -87,6 +87,12 @@ class ModificationUtilisateurType extends AbstractType
             ->add('numTelephone', TextType::class, [
                 'label' => 'Numéro de téléphone',
                 'required' => false,
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^[0-9]{1,10}$/',
+                        'message' => 'Veuillez entrer un numéro de téléphone valide (10 chiffres maximum).',
+                    ]),
+                ],
             ])
             ->add('profile', FileType::class, [
                 'required' => false,
