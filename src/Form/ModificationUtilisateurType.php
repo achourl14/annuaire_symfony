@@ -82,6 +82,7 @@ class ModificationUtilisateurType extends AbstractType
             ->add('code', TextType::class,
                 [
                     'required' => false,
+                    'empty_data' => '',  // Définit explicitement `null` si le champ est vide
                 ])
             ->add('numTelephone', TextType::class, [
                 'label' => 'Numéro de téléphone',

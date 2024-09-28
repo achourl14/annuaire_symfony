@@ -86,6 +86,31 @@ class RegistrationController extends AbstractController
         return new JsonResponse([],204);
     }
 
+//    verifie que le mdp suit le regex suivant new NotBlank(),
+//                    new NotNull(),
+//                    new Length([
+//                        'min' => 8,
+//                        'max' => 30,
+//                        'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères',
+//                        'maxMessage' => 'Le mot de passe doit contenir au maximum {{ limit }} caractères'
+//                    ]),
+//                    new Regex([
+//                        'pattern' => '#^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,30}$#',
+//                        'message' => 'Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre'
+//                    ])
+
+    #[Route('/verification/creation/password/{password}', name: 'verifCreationPasswordUser', options: ['expose' => true])]
+    public function verificationCreationPasswordUtilisateur(string $password): Response
+    {
+        // Vérifie si le mot de passe respecte le pattern de la regex
+        if (!preg_match('#^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,30}$#', $password)) {
+            return new JsonResponse(['error' => 'Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre'], 400);
+        }
+
+        return new JsonResponse([], 204); // Si la vérification passe, retourne une réponse vide avec le code 204
+    }
+
+
     #[Route('/verification/login/{login}', name: 'verifLoginUser', options: ['expose' => true])]
     public function verificationLoginUtilisateur(string $login): Response
     {

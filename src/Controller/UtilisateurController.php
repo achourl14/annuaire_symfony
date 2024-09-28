@@ -67,18 +67,30 @@ class UtilisateurController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->get('email')->getData();
-            if ($password = $form->get('newPassword')->getData() != null) {
+            if ($form->get('email')->getData() != null) {
+                $email = $form->get('email')->getData();
+            } else {
+                $email = $user->getEmail();
+            }
+            if ($form->get('newPassword')->getData() != null) {
                 $password = $form->get('newPassword')->getData();
             } else {
                 $password = $form->get('oldPassword')->getData();
             }
             $visible = $form->get('visible')->getData();
-            $code = $form->get('code')->getData();
+
             $numTel = $form->get('numTelephone')->getData();
             $fichierPhotoProfil = $form->get('profile')->getData();
 
-            $this->userManager->modifieUser($user, $password, $email, $visible, $code, $numTel,$fichierPhotoProfil);
+            if ($form->get('code')->getData() !== '' && $form->get('code')->getData() !== null) {
+                $code = $form->get('code')->getData();
+                $this->userManager->modifieUser($user, $password, $email, $visible, $code, $numTel,$fichierPhotoProfil);
+            }
+            else {
+                $this->userManager->modifieUser($user, $password, $email, $visible, null, $numTel,$fichierPhotoProfil);
+            }
+
+
             $this->entityManager->flush();
             $this->addFlash('success',"L'utilisateur a été modifié");
             return $this->redirectToRoute('app_home');
